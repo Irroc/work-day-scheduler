@@ -16,7 +16,6 @@ I used Dayjs to display the current day as well as for getting the hou of the da
 
 ## Features
 
-If your project has a lot of features, list them here.
 * Color coded hours of the day.
 * Color code updates anytime the page is reopened, refreshed or saved.
 * When saved, your input stays in the correct time block anytime the page is reopened or refreshed.
