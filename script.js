@@ -1,10 +1,7 @@
-// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
-// the code isn't run until the browser has finished rendering all the elements
-// in the html.
 $(document).ready(function () {
   const currentDay = document.getElementById('currentDay')
   const allHourContainer = document.getElementsByClassName('time-block')
-  const nine = document.getElementById('hour-9')
+  const nine = document.getElementById('hour-9') //all the hour blocks need the value assigned to compair to the current time and assign the correct color for the user 
   nine.value = 9
   const ten = document.getElementById('hour-10')
   ten.value = 10
@@ -22,21 +19,20 @@ $(document).ready(function () {
   four.value = 16
   const five = document.getElementById('hour-5')
   five.value = 17
-let userInput
+  let userInput
   const hoursADay = [nine, ten, eleven, twelve, one, two, three, four, five]
-  let storedData
-  currentDay.textContent = dayjs().format('MMM/DD/YYYY')
-  
+  let storedData //this is declared to pull the stored data from the colorCodeHours function to be used later in the event listeners
+  currentDay.textContent = dayjs().format('MMM/DD/YYYY') // this displays the current date to the user 
+
   console.log(dayjs().format('H'))
-  function colorCodeHours() {
-    for (let i = 0; i < hoursADay.length; i++) {
-      storedData = localStorage.getItem("userText")
-      
+  function colorCodeHours() { // this function checks local storage for any saved input and colors the hours according to the time found in the dayjs function. ps its intended the colors, the save data button, and the return saved data will cause the page to change the colors of the hour blocks if the time changes
+    for (let i = 0; i < hoursADay.length; i++) { 
+      storedData = localStorage.getItem("userText")//this gets the locally stored data frfom the user
       storedData = JSON.parse(storedData)
-      if (storedData != null){
-      hoursADay[i].children[1].value = storedData[i]
+      if (storedData != null) { //this stops null from displaying if the user has no data stored in an hour of the planner
+        hoursADay[i].children[1].value = storedData[i]
       }
-      if (hoursADay[i].value < dayjs().format('H')) {
+      if (hoursADay[i].value < dayjs().format('H')) {//this if and its else if statements color the hour blocks according to the time found in dayjs 
         hoursADay[i].classList.add('past')
       }
       else if (hoursADay[i].value == dayjs().format('H')) {
@@ -47,41 +43,20 @@ let userInput
       }
     }
   }
-  colorCodeHours()
-  console.log (hoursADay[0].children[2])
-  for (let i = 0; i < hoursADay.length; i++) {
-    hoursADay[i].children[2].addEventListener("click", function(){
+  colorCodeHours()//this calls the function to render the page on the initial load of the page
+  for (let i = 0; i < hoursADay.length; i++) {//this creates the listeners for the buttons and when its clicked it will store the users input under userText
+    hoursADay[i].children[2].addEventListener("click", function () {
       console.log(hoursADay[i].children[1].value)
-      let userInput = []
-      if(storedData == undefined){
-        userInput = [ '','','','','','','','','' ]
-       }
-       else if (storedData){
+      let userInput = [] //this must be declared empty to stop errors in loading
+      if (storedData == undefined) {//if thers no storred data this will reset the user input to the correct format for the used for loops
+        userInput = ['', '', '', '', '', '', '', '', '']
+      }
+      else if (storedData) {//this will load the users stored data when the page is closed and reopened
         userInput = storedData
-       }
-      userInput[i] = hoursADay[i].children[1].value
-      localStorage.setItem("userText", JSON.stringify(userInput))
-      colorCodeHours()})
+      }
+      userInput[i] = hoursADay[i].children[1].value//this is how it saves the data in the correct slot in the array
+      localStorage.setItem("userText", JSON.stringify(userInput))//this saves the data to local storage
+      colorCodeHours()//this is called to recolor the page when any save button is clicked 
+    })
   }
-  // allHourContainer.on('click', '.time-block', colorCodeHours)
-
-  // TODO: Add a listener for click events on the save button. This code should
-  // use the id in the containing time-block as a key to save the user input in
-  // local storage. HINT: What does `this` reference in the click listener
-  // function? How can DOM traversal be used to get the "hour-x" id of the
-  // time-block containing the button that was clicked? How might the id be
-  // useful when saving the description in local storage?
-  //
-  // TODO: Add code to apply the past, present, or future class to each time
-  // block by comparing the id to the current hour. HINTS: How can the id
-  // attribute of each time-block be used to conditionally add or remove the
-  // past, present, and future classes? How can Day.js be used to get the
-  // current hour in 24-hour time?
-  //
-  // TODO: Add code to get any user input that was saved in localStorage and set
-  // the values of the corresponding textarea elements. HINT: How can the id
-  // attribute of each time-block be used to do this?
-  //
-  // TODO: Add code to display the current date in the header of the page.
-
 })
